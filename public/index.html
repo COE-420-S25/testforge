@@ -3,12 +3,303 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TestForge</title>
+    <title>TestForge - Smart Code Testing Platform</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
   </head>
   <body>
-    <h1>Welcome to TestForge</h1>
-    <p>This is the temporary homepage while we build out the full platform.</p>
-    <a href="/proposal">View Proposal Page</a>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <h1>TestForge</h1>
+          <p class="tagline">Smart Code Testing Platform</p>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="/proposal" class="proposal-link">Proposal</a></li>
+            <li>
+              <a href="https://github.com/COE-420-S25" target="_blank"
+                >GitHub</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h2>Automated Test Generation for Your Code</h2>
+            <p>
+              TestForge helps developers find bugs and edge cases by generating
+              intelligent test cases for your code. Upload your code, get test
+              results, and improve your software quality.
+            </p>
+            <div class="hero-actions">
+              <a href="#upload-section" class="btn btn-primary"
+                >Test Your Code</a
+              >
+              <p class="proposal-note">
+                Interested in the technical details?
+                <a href="/proposal" class="hero-proposal-link"
+                  >View our project proposal</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="upload-section" class="upload-section">
+        <div class="container">
+          <h2>Upload Your Code</h2>
+          <p>Select a language and paste or upload your code to get started.</p>
+
+          <div class="code-upload-panel">
+            <div class="language-selector">
+              <label for="language-select">Language:</label>
+              <select id="language-select">
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+                <option value="csharp">C#</option>
+              </select>
+            </div>
+
+            <div class="code-editor-container">
+              <div class="editor-header">
+                <span>Code Editor</span>
+                <div class="editor-actions">
+                  <button id="upload-file-btn" class="btn btn-small">
+                    <i class="fas fa-upload"></i> Upload File
+                  </button>
+                  <input type="file" id="code-file-input" hidden />
+                  <button
+                    id="clear-editor-btn"
+                    class="btn btn-small btn-outline"
+                  >
+                    <i class="fas fa-trash"></i> Clear
+                  </button>
+                </div>
+              </div>
+              <textarea
+                id="code-editor"
+                placeholder="// Paste your code here or upload a file"
+              ></textarea>
+            </div>
+
+            <div class="upload-actions">
+              <button id="submit-code-btn" class="btn btn-primary">
+                <i class="fas fa-play"></i> Run Tests
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="results-section" class="results-section hidden">
+        <div class="container">
+          <h2>Test Results</h2>
+          <div class="results-container">
+            <div class="results-header">
+              <h3>Test Summary</h3>
+              <div class="results-stats">
+                <div class="stat">
+                  <span class="stat-value">5</span>
+                  <span class="stat-label">Total Tests</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value passed">4</span>
+                  <span class="stat-label">Passed</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value failed">1</span>
+                  <span class="stat-label">Failed</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="test-cases">
+              <div class="test-case passed">
+                <div class="test-info">
+                  <span class="test-icon"
+                    ><i class="fas fa-check-circle"></i
+                  ></span>
+                  <span class="test-name">Basic Functionality Test</span>
+                </div>
+                <div class="test-details">
+                  <p>Input: [1, 2, 3, 4, 5]</p>
+                  <p>Expected: 15</p>
+                  <p>Actual: 15</p>
+                </div>
+              </div>
+
+              <div class="test-case passed">
+                <div class="test-info">
+                  <span class="test-icon"
+                    ><i class="fas fa-check-circle"></i
+                  ></span>
+                  <span class="test-name">Empty Array Test</span>
+                </div>
+                <div class="test-details">
+                  <p>Input: []</p>
+                  <p>Expected: 0</p>
+                  <p>Actual: 0</p>
+                </div>
+              </div>
+
+              <div class="test-case passed">
+                <div class="test-info">
+                  <span class="test-icon"
+                    ><i class="fas fa-check-circle"></i
+                  ></span>
+                  <span class="test-name">Negative Numbers Test</span>
+                </div>
+                <div class="test-details">
+                  <p>Input: [-1, -2, -3]</p>
+                  <p>Expected: -6</p>
+                  <p>Actual: -6</p>
+                </div>
+              </div>
+
+              <div class="test-case passed">
+                <div class="test-info">
+                  <span class="test-icon"
+                    ><i class="fas fa-check-circle"></i
+                  ></span>
+                  <span class="test-name">Large Numbers Test</span>
+                </div>
+                <div class="test-details">
+                  <p>Input: [1000000, 2000000]</p>
+                  <p>Expected: 3000000</p>
+                  <p>Actual: 3000000</p>
+                </div>
+              </div>
+
+              <div class="test-case failed">
+                <div class="test-info">
+                  <span class="test-icon"
+                    ><i class="fas fa-times-circle"></i
+                  ></span>
+                  <span class="test-name">Edge Case: Non-number Input</span>
+                </div>
+                <div class="test-details">
+                  <p>Input: [1, 2, "3", 4]</p>
+                  <p>Expected: Type Error</p>
+                  <p>Actual: "1234"</p>
+                  <div class="suggestion">
+                    <h4>Suggestion:</h4>
+                    <p>
+                      Your function should validate input types. Consider adding
+                      type checking before performing operations.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features-section">
+        <div class="container">
+          <h2>Key Features</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fas fa-robot"></i></div>
+              <h3>AI-Generated Tests</h3>
+              <p>
+                Our platform uses AI to generate comprehensive test cases that
+                cover edge cases you might miss.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fas fa-bug"></i></div>
+              <h3>Bug Detection</h3>
+              <p>
+                Find hidden bugs and edge cases in your code before they reach
+                production.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fas fa-code"></i></div>
+              <h3>Multiple Languages</h3>
+              <p>
+                Support for JavaScript, Python, Java, C++, and more programming
+                languages.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fas fa-lightbulb"></i></div>
+              <h3>Smart Suggestions</h3>
+              <p>
+                Get intelligent suggestions for fixing failing tests and
+                improving your code.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about-section">
+        <div class="container">
+          <h2>About TestForge</h2>
+          <p>
+            TestForge is a class project developed by a team of software
+            engineering students. Our goal is to create a platform that helps
+            developers write better code by automatically generating
+            comprehensive test cases.
+          </p>
+
+          <div class="team-section">
+            <h3>Our Team</h3>
+            <div class="team-grid">
+              <div class="team-member">
+                <h4>Omar Elshall</h4>
+                <p>Code Upload UI</p>
+              </div>
+              <div class="team-member">
+                <h4>Hamad Kalbat</h4>
+                <p>Homepage & Styling</p>
+              </div>
+              <div class="team-member">
+                <h4>Kinan Khaskieh</h4>
+                <p>Results Display</p>
+              </div>
+              <div class="team-member">
+                <h4>Osama Hasayen</h4>
+                <p>API Research</p>
+              </div>
+              <div class="team-member">
+                <h4>Khaldun Daya</h4>
+                <p>AI Integration</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 TestForge. All rights reserved.</p>
+        <p>Created as a Software Engineering Class Project</p>
+      </div>
+    </footer>
+
+    <script src="js/upload.js"></script>
+    <script src="js/results.js"></script>
   </body>
 </html>
