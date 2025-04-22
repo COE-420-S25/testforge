@@ -110,6 +110,18 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = "";
 
     results.testCases.forEach((test) => {
+      // Process the actualOutput to extract just the value
+      let statusLine = "";
+      let actualValue = "";
+
+      if (test.actualOutput) {
+        const lines = test.actualOutput
+          .split("\n")
+          .filter((line) => line.trim());
+        if (lines.length >= 1) statusLine = lines[0].trim(); // First line is PASSED/FAILED
+        if (lines.length >= 2) actualValue = lines[1].trim(); // Second line is the actual value
+      }
+
       const element = document.createElement("div");
       element.className = `test-case ${test.passed ? "passed" : "failed"}`;
       element.innerHTML = `
@@ -124,12 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="test-details" style="display: none;">
           <p>Input: ${test.input}</p>
           <p>Expected: ${test.expectedOutput}</p>
-          ${test.actualOutput ? `<p>Actual: ${test.actualOutput}</p>` : ""}
+          <p>Actual: ${actualValue}</p>
           ${test.errorMessage ? `<p>Error: ${test.errorMessage}</p>` : ""}
         </div>
       `;
 
-      // Toggle details on click
+      // Toggle details
       const info = element.querySelector(".test-info");
       const details = element.querySelector(".test-details");
       info.addEventListener("click", () => {

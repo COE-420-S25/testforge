@@ -151,11 +151,10 @@ try {
   } else {
     console.log(actual == expected ? "PASSED" : "FAILED");
   }
-  console.log("Expected:", expected);
-  console.log("Actual:", actual);
+  console.log(actual);
 } catch (error) {
   console.log("FAILED");
-  console.error("Error:", error.message);
+  console.error(error.message);
 }`;
 
     case "python":
@@ -178,11 +177,10 @@ try:
         print("PASSED" if math.isnan(result) else "FAILED")
     else:
         print("PASSED" if result == expected else "FAILED")
-    print(f"Expected: {expected}")
-    print(f"Actual: {result}")
+    print(f"{result}")
 except Exception as e:
     print("FAILED")
-    print(f"Error: {str(e)}")`;
+    print(f"{str(e)}")`;
 
     case "cpp":
       return `
@@ -217,11 +215,10 @@ int main() {
             std::cout << (std::abs(result - expected) < 0.0001 ? "PASSED" : "FAILED") << std::endl;
         }
         
-        std::cout << "Expected: ${test.expectedOutput}" << std::endl;
-        std::cout << "Actual: " << result << std::endl;
+        std::cout << result << std::endl;
     } catch (...) {
         std::cout << "FAILED" << std::endl;
-        std::cout << "Error: Exception caught" << std::endl;
+        std::cout << "Exception caught" << std::endl;
     }
     return 0;
 }`;
