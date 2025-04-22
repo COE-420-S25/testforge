@@ -1,6 +1,7 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const path = require("path"); // Added path module
 require("dotenv").config();
 
 const app = express();
@@ -10,6 +11,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+app.use("/proposal", express.static("proposal")); // Added static route for proposal folder
+
+// Request logger
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
