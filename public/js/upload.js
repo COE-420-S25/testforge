@@ -1,103 +1,146 @@
 // js/upload.js
 document.addEventListener("DOMContentLoaded", () => {
-  // Get DOM elements
   const codeEditor = document.getElementById("code-editor");
   const languageSelect = document.getElementById("language-select");
   const uploadFileBtn = document.getElementById("upload-file-btn");
   const codeFileInput = document.getElementById("code-file-input");
-  const clearEditorBtn = document.getElementById("clear-editor-btn");
   const submitCodeBtn = document.getElementById("submit-code-btn");
   const resultsSection = document.getElementById("results-section");
 
-  // Handle file upload button click
-  uploadFileBtn.addEventListener("click", () => {
-    codeFileInput.click();
-  });
+  // File upload
+  uploadFileBtn.addEventListener("click", () => codeFileInput.click());
 
-  // Handle file selection
   codeFileInput.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Check file size (limit to 1MB)
-    if (file.size > 1024 * 1024) {
-      alert("File size exceeds 1MB limit. Please choose a smaller file.");
-      return;
-    }
-
-    // Automatically set language based on file extension
-    const fileExtension = file.name.split(".").pop().toLowerCase();
-    setLanguageFromExtension(fileExtension);
-
-    // Read file content
     const reader = new FileReader();
     reader.onload = (e) => {
       codeEditor.value = e.target.result;
+
+      // Auto-detect language from file extension
+      const extension = file.name.split(".").pop().toLowerCase();
+      const extensionMap = {
+        js: "javascript",
+        py: "python",
+        cpp: "cpp",
+        c: "cpp",
+      };
+
+      if (extensionMap[extension]) {
+        languageSelect.value = extensionMap[extension];
+      }
     };
     reader.readAsText(file);
   });
 
-  // Clear editor content
-  clearEditorBtn.addEventListener("click", () => {
-    codeEditor.value = "";
-    codeEditor.focus();
-  });
-
-  // Submit code for testing (currently just shows the results section)
-  submitCodeBtn.addEventListener("click", () => {
-    if (!validateCodeSubmission()) {
-      return;
-    }
-
-    // For now, we're just displaying the static results section
-    resultsSection.classList.remove("hidden");
-
-    // Scroll to results section
-    resultsSection.scrollIntoView({ behavior: "smooth" });
-  });
-
-  // Validate code submission
-  function validateCodeSubmission() {
+  // Submit code
+  submitCodeBtn.addEventListener("click", async () => {
     const code = codeEditor.value.trim();
     const language = languageSelect.value;
 
-    if (!code) {
-      alert("Please enter or upload some code first.");
-      codeEditor.focus();
-      return false;
+    if (!code || !language) {
+      alert("Code and language required");
+      return;
     }
 
-    if (!language) {
-      alert("Please select a programming language.");
-      languageSelect.focus();
-      return false;
+    submitCodeBtn.disabled = true;
+    submitCodeBtn.innerHTML =
+      '<i class="fas fa-spinner fa-spin"></i> Running...';
+
+    try {
+      // Generate tests
+      const testResponse = await fetch("/api/generate-tests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, language }),
+      });
+
+      if (!testResponse.ok) {
+        const errorData = await testResponse.json();
+        throw new Error(errorData.error || "Failed to generate tests");
+      }
+
+      const testResults = await testResponse.json();
+
+      // Execute tests
+      const executeResponse = await fetch("/api/execute-tests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          language,
+          testCases: testResults.testCases,
+        }),
+      });
+
+      if (!executeResponse.ok) {
+        const executeErrorData = await executeResponse.json();
+        throw new Error(executeErrorData.error || "Failed to execute tests");
+      }
+
+      const executionResults = await executeResponse.json();
+
+      // Store results for code fixer
+      if (window.storeTestResults) {
+        window.storeTestResults(testResults.testCases, executionResults);
+      }
+
+      displayTestResults(executionResults);
+      resultsSection.classList.remove("hidden");
+      resultsSection.scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      submitCodeBtn.disabled = false;
+      submitCodeBtn.innerHTML = '<i class="fas fa-play"></i> Run Tests';
     }
+  });
 
-    return true;
+  function displayTestResults(results) {
+    // Update stats
+    const stats = document.querySelectorAll(".stat-value");
+    stats[0].textContent = results.summary.totalTests;
+    stats[1].textContent = results.summary.passedTests;
+    stats[2].textContent = results.summary.failedTests;
+
+    // Display test cases
+    const container = document.querySelector(".test-cases");
+    container.innerHTML = "";
+
+    results.testCases.forEach((test) => {
+      const element = document.createElement("div");
+      element.className = `test-case ${test.passed ? "passed" : "failed"}`;
+      element.innerHTML = `
+        <div class="test-info">
+          <span class="test-icon">
+            <i class="fas fa-${
+              test.passed ? "check-circle" : "times-circle"
+            }"></i>
+          </span>
+          <span class="test-name">${test.name}</span>
+        </div>
+        <div class="test-details" style="display: none;">
+          <p>Input: ${test.input}</p>
+          <p>Expected: ${test.expectedOutput}</p>
+          ${test.actualOutput ? `<p>Actual: ${test.actualOutput}</p>` : ""}
+          ${test.errorMessage ? `<p>Error: ${test.errorMessage}</p>` : ""}
+        </div>
+      `;
+
+      // Toggle details on click
+      const info = element.querySelector(".test-info");
+      const details = element.querySelector(".test-details");
+      info.addEventListener("click", () => {
+        details.style.display =
+          details.style.display === "none" ? "block" : "none";
+      });
+
+      container.appendChild(element);
+    });
   }
 
-  // Set language dropdown based on file extension
-  function setLanguageFromExtension(extension) {
-    const extensionToLanguage = {
-      js: "javascript",
-      py: "python",
-      java: "java",
-      cpp: "cpp",
-      c: "cpp",
-      cs: "csharp",
-      php: "php",
-    };
-
-    const language = extensionToLanguage[extension];
-    if (language && hasLanguageOption(language)) {
-      languageSelect.value = language;
-    }
-  }
-
-  // Check if language is in the dropdown options
-  function hasLanguageOption(language) {
-    return [...languageSelect.options].some(
-      (option) => option.value === language
-    );
-  }
+  // Make it available globally
+  window.displayTestResults = displayTestResults;
 });

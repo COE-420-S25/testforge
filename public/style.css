@@ -525,6 +525,515 @@ footer p:last-child {
   font-size: 0.8rem;
 }
 
+/* Add this to your style.css file */
+
+/* Results actions section for the Fix Code button */
+.results-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  position: relative;
+}
+
+.action-tooltip {
+  position: absolute;
+  bottom: -35px;
+  right: 0;
+  background-color: var(--bg-tertiary);
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  box-shadow: 0 2px 8px var(--shadow);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  width: 250px;
+  text-align: center;
+  z-index: 10;
+}
+
+.results-actions:hover .action-tooltip {
+  opacity: 1;
+}
+
+.results-header {
+  position: relative;
+}
+
+/* Make results header handle the fix code button */
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Code fixes section styling */
+.code-fixes-section {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.code-fixes-section.hidden {
+  display: none;
+}
+
+.code-analysis-panel {
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--shadow);
+  margin-top: 1.5rem;
+}
+
+.analysis-header {
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.analysis-content {
+  padding: 1.5rem;
+}
+
+#analysis-details {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Changes list styling */
+.changes-list {
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.changes-list.hidden {
+  display: none;
+}
+
+.changes-list h4 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.changes-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.changes-list li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.changes-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+/* Code comparison styling */
+.code-comparison {
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.code-comparison.hidden {
+  display: none;
+}
+
+.code-comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.code-comparison-header h4 {
+  margin-bottom: 0;
+  color: var(--accent);
+}
+
+.comparison-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#fixed-code-editor {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  background-color: var(--code-bg);
+  color: var(--text-primary);
+  font-family: "Courier New", monospace;
+  border: none;
+  resize: vertical;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* No changes needed styling */
+.no-changes-needed {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+.no-changes-needed.hidden {
+  display: none;
+}
+
+.no-changes-icon {
+  font-size: 3rem;
+  color: var(--success);
+  margin-bottom: 1rem;
+}
+
+.no-changes-needed h4 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--success);
+}
+
+.no-changes-needed p {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Fixed code test results styling */
+.fixed-code-results {
+  margin-top: 2rem;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+
+.fixed-code-results.hidden {
+  display: none;
+}
+
+.fixed-results-header {
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.fixed-results-header h4 {
+  margin-bottom: 0;
+  color: var(--accent);
+}
+
+.fixed-results-stats {
+  display: flex;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  justify-content: center;
+  gap: 2rem;
+}
+
+.fixed-test-cases {
+  padding: 1rem;
+}
+
+/* Comparison indicator */
+.test-improvement {
+  font-size: 0.85rem;
+  margin-left: 1rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.test-improved {
+  background-color: rgba(46, 213, 115, 0.1);
+  color: var(--success);
+}
+
+.test-same {
+  background-color: rgba(0, 195, 255, 0.1);
+  color: var(--accent);
+}
+
+.test-worse {
+  background-color: rgba(255, 71, 87, 0.1);
+  color: var(--error);
+}
+
+/* Loading animation for fix generation */
+@keyframes pulse-border {
+  0% {
+    border-color: var(--border);
+  }
+  50% {
+    border-color: var(--accent);
+  }
+  100% {
+    border-color: var(--border);
+  }
+}
+
+.analysis-loading .code-analysis-panel {
+  animation: pulse-border 1.5s infinite;
+  border: 1px solid var(--border);
+}
+
+.analysis-loading #analysis-status::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+/* Additional styles for TestForge - add to style.css */
+
+/* Code description section */
+.code-description {
+  background-color: var(--bg-secondary);
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border-left: 3px solid var(--accent);
+}
+
+.code-description-header {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.code-description-header h4 {
+  margin-bottom: 0;
+  color: var(--accent);
+}
+
+.code-description-content {
+  padding: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Neutral test cases (proposed but not run) */
+.test-case.neutral .test-info {
+  border-left: 3px solid var(--accent);
+}
+
+.test-case.neutral .test-icon {
+  color: var(--accent);
+}
+
+/* Add animation to the loading spinner */
+.loading-spinner {
+  box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+}
+
+/* Execution details styling */
+.execution-details {
+  background-color: var(--bg-tertiary);
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+}
+
+.execution-details p {
+  margin-bottom: 0;
+  color: var(--accent);
+}
+
+/* Error message styling */
+.error-message {
+  background-color: rgba(255, 71, 87, 0.1);
+  border-radius: 4px;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-left: 3px solid var(--error);
+}
+
+.error-message h4 {
+  color: var(--error);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.error-message pre {
+  background-color: var(--bg-tertiary);
+  padding: 0.8rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  max-height: 200px;
+  margin-bottom: 0;
+}
+
+/* Test case status indicators */
+.test-info {
+  position: relative;
+}
+
+.test-info::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.test-case.passed .test-info::after {
+  background-color: var(--success);
+  box-shadow: 0 0 5px var(--success);
+}
+
+.test-case.failed .test-info::after {
+  background-color: var(--error);
+  box-shadow: 0 0 5px var(--error);
+}
+
+.test-case.neutral .test-info::after {
+  background-color: var(--accent);
+  box-shadow: 0 0 5px var(--accent);
+}
+
+/* Execution summary at the top of results */
+.execution-summary {
+  background-color: var(--bg-tertiary);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.execution-info span {
+  display: inline-block;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
+
+.execution-label {
+  color: var(--text-secondary);
+}
+
+.execution-value {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+/* Run test button in the test case */
+.run-test-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.run-test-btn:hover {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+.run-test-btn i {
+  font-size: 0.7rem;
+}
+
+/* Add this to your style.css file */
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(5, 5, 5, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: var(--text-primary);
+  font-family: "Courier New", monospace;
+  font-size: 1.1rem;
+}
+
+.loading-overlay.hidden {
+  display: none;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid var(--bg-tertiary);
+  border-top: 5px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px var(--shadow);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   h1 {

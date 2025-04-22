@@ -22,7 +22,6 @@
             <li><a href="#" class="active">Home</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="/proposal" class="proposal-link">Proposal</a></li>
             <li>
               <a href="https://github.com/COE-420-S25" target="_blank"
                 >GitHub</a
@@ -47,12 +46,6 @@
               <a href="#upload-section" class="btn btn-primary"
                 >Test Your Code</a
               >
-              <p class="proposal-note">
-                Interested in the technical details?
-                <a href="/proposal" class="hero-proposal-link"
-                  >View our project proposal</a
-                >
-              </p>
             </div>
           </div>
         </div>
@@ -69,9 +62,7 @@
               <select id="language-select">
                 <option value="javascript">JavaScript</option>
                 <option value="python">Python</option>
-                <option value="java">Java</option>
                 <option value="cpp">C++</option>
-                <option value="csharp">C#</option>
               </select>
             </div>
 
@@ -83,12 +74,6 @@
                     <i class="fas fa-upload"></i> Upload File
                   </button>
                   <input type="file" id="code-file-input" hidden />
-                  <button
-                    id="clear-editor-btn"
-                    class="btn btn-small btn-outline"
-                  >
-                    <i class="fas fa-trash"></i> Clear
-                  </button>
                 </div>
               </div>
               <textarea
@@ -114,97 +99,52 @@
               <h3>Test Summary</h3>
               <div class="results-stats">
                 <div class="stat">
-                  <span class="stat-value">5</span>
+                  <span class="stat-value">0</span>
                   <span class="stat-label">Total Tests</span>
                 </div>
                 <div class="stat">
-                  <span class="stat-value passed">4</span>
+                  <span class="stat-value passed">0</span>
                   <span class="stat-label">Passed</span>
                 </div>
                 <div class="stat">
-                  <span class="stat-value failed">1</span>
+                  <span class="stat-value failed">0</span>
                   <span class="stat-label">Failed</span>
+                </div>
+              </div>
+              <div class="results-actions">
+                <button id="fix-code-btn" class="btn btn-outline">
+                  <i class="fas fa-wrench"></i> Fix My Code
+                </button>
+              </div>
+
+              <div id="code-fixes-section" class="code-fixes-section hidden">
+                <h3>Code Analysis & Fixes</h3>
+
+                <div class="code-analysis-panel">
+                  <div class="analysis-content">
+                    <div id="analysis-details"></div>
+
+                    <div class="code-comparison hidden" id="code-comparison">
+                      <div class="code-comparison-header">
+                        <h4>Fixed Code:</h4>
+                        <button
+                          id="test-fixed-code-btn"
+                          class="btn btn-small btn-primary"
+                        >
+                          <i class="fas fa-play"></i> Test Fixed Code
+                        </button>
+                      </div>
+                      <div class="code-editor-container">
+                        <textarea id="fixed-code-editor" readonly></textarea>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div class="test-cases">
-              <div class="test-case passed">
-                <div class="test-info">
-                  <span class="test-icon"
-                    ><i class="fas fa-check-circle"></i
-                  ></span>
-                  <span class="test-name">Basic Functionality Test</span>
-                </div>
-                <div class="test-details">
-                  <p>Input: [1, 2, 3, 4, 5]</p>
-                  <p>Expected: 15</p>
-                  <p>Actual: 15</p>
-                </div>
-              </div>
-
-              <div class="test-case passed">
-                <div class="test-info">
-                  <span class="test-icon"
-                    ><i class="fas fa-check-circle"></i
-                  ></span>
-                  <span class="test-name">Empty Array Test</span>
-                </div>
-                <div class="test-details">
-                  <p>Input: []</p>
-                  <p>Expected: 0</p>
-                  <p>Actual: 0</p>
-                </div>
-              </div>
-
-              <div class="test-case passed">
-                <div class="test-info">
-                  <span class="test-icon"
-                    ><i class="fas fa-check-circle"></i
-                  ></span>
-                  <span class="test-name">Negative Numbers Test</span>
-                </div>
-                <div class="test-details">
-                  <p>Input: [-1, -2, -3]</p>
-                  <p>Expected: -6</p>
-                  <p>Actual: -6</p>
-                </div>
-              </div>
-
-              <div class="test-case passed">
-                <div class="test-info">
-                  <span class="test-icon"
-                    ><i class="fas fa-check-circle"></i
-                  ></span>
-                  <span class="test-name">Large Numbers Test</span>
-                </div>
-                <div class="test-details">
-                  <p>Input: [1000000, 2000000]</p>
-                  <p>Expected: 3000000</p>
-                  <p>Actual: 3000000</p>
-                </div>
-              </div>
-
-              <div class="test-case failed">
-                <div class="test-info">
-                  <span class="test-icon"
-                    ><i class="fas fa-times-circle"></i
-                  ></span>
-                  <span class="test-name">Edge Case: Non-number Input</span>
-                </div>
-                <div class="test-details">
-                  <p>Input: [1, 2, "3", 4]</p>
-                  <p>Expected: Type Error</p>
-                  <p>Actual: "1234"</p>
-                  <div class="suggestion">
-                    <h4>Suggestion:</h4>
-                    <p>
-                      Your function should validate input types. Consider adding
-                      type checking before performing operations.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <!-- Test cases will be dynamically generated here -->
             </div>
           </div>
         </div>
@@ -236,8 +176,7 @@
               <div class="feature-icon"><i class="fas fa-code"></i></div>
               <h3>Multiple Languages</h3>
               <p>
-                Support for JavaScript, Python, Java, C++, and more programming
-                languages.
+                Support for JavaScript, Python, and C++ programming languages.
               </p>
             </div>
 
@@ -300,6 +239,6 @@
     </footer>
 
     <script src="js/upload.js"></script>
-    <script src="js/results.js"></script>
+    <script src="js/codeFixer.js"></script>
   </body>
 </html>

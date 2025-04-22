@@ -1,0 +1,323 @@
+[2025-04-21T18:40:07.886Z] Received test execution request
+{
+  "language": "javascript",
+  "testCasesCount": 5
+}
+
+[2025-04-21T18:40:07.887Z] Code to test:
+function arraySum(numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  return sum;
+}
+
+[2025-04-21T18:40:07.887Z] First test case:
+{
+  "id": "test-1",
+  "name": "Basic Functionality Test",
+  "input": "[1, 2, 3, 4, 5]",
+  "expectedOutput": "15",
+  "passed": null,
+  "details": "Verifies that the function correctly adds up positive integers",
+  "suggestion": "No improvement needed for basic functionality"
+}
+
+[2025-04-21T18:40:07.887Z] Starting test execution
+
+[2025-04-21T18:40:07.888Z] Creating test wrappers for 5 tests in javascript
+
+[2025-04-21T18:40:07.888Z] Creating test wrapper for javascript test: Basic Functionality Test
+
+[2025-04-21T18:40:07.888Z] Parsed test input/output
+{
+  "input": "[1, 2, 3, 4, 5]",
+  "expectedOutput": "15"
+}
+
+[2025-04-21T18:40:07.888Z] Wrapped code for first test (Basic Functionality Test):
+
+// ============== DEBUG INFO ==============
+// Test case name: Basic Functionality Test
+// Input: [1, 2, 3, 4, 5]
+// Expected Output: 15
+// ======================================
+
+// Original code
+function arraySum(numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  return sum;
+}
+
+// Execute the test
+try {
+  console.log("\n[Debug] Starting test execution for 'Basic Functionality Test'");
+  
+  // Parse the input and expected output
+  let parsedInput;
+  try {
+    parsedInput = [1, 2, 3, 4, 5];
+    console.log("[Debug] Parsed input:", JSON.stringify(parsedInput));
+  } catch (e) {
+    console.error("[Debug] Error parsing input:", e.message);
+    parsedInput = [1, 2, 3, 4, 5];
+  }
+  
+  let parsedExpectedOutput;
+  try {
+    parsedExpectedOutput = 15;
+    console.log("[Debug] Parsed expected output:", JSON.stringify(parsedExpectedOutput));
+  } catch (e) {
+    console.error("[Debug] Error parsing expected output:", e.message);
+    parsedExpectedOutput = 15;
+  }
+
+  // Log available functions
+  console.log("[Debug] Looking for function in the code...");
+  
+  // First, examine the submitted code for function definitions
+  const functionNames = [];
+  
+  // For "function name()" style
+  let match;
+  const fnRegex = /function\s+(\w+)\s*\(/g;
+  while ((match = fnRegex.exec("function arraySum(numbers) {\n  let sum = 0;\n  for (let i = 0; i < numbers.length; i++) {\n    sum += numbers[i];\n  }\n  return sum;\n}")) !== null) {
+    functionNames.push(match[1]);
+  }
+  
+  // For "const name = function()" or "const name = ()" style
+  const varFnRegex = /(?:var|let|const)\s+(\w+)\s*=\s*(?:function|\()/g;
+  while ((match = varFnRegex.exec("function arraySum(numbers) {\n  let sum = 0;\n  for (let i = 0; i < numbers.length; i++) {\n    sum += numbers[i];\n  }\n  return sum;\n}")) !== null) {
+    functionNames.push(match[1]);
+  }
+  
+  console.log("[Debug] Detected functions:", functionNames.join(", ") || "none");
+  
+  // Try common function names if none found
+  const possibleNames = ["arraySum", "sum", "calculateSum", ...functionNames, "solution"];
+  let functionName = null;
+  
+  for (const name of possibleNames) {
+    try {
+      console.log("[Debug] Checking if '" + name + "' is a function");
+      // Check if the function exists in global scope
+      const fn = eval(name);
+      if (typeof fn === "function") {
+        functionName = name;
+        console.log("[Debug] Found function: " + name);
+        break;
+      }
+    } catch (e) {
+      console.log("[Debug] Function '" + name + "' not found or error: " + e.message);
+    }
+  }
+  
+  if (!functionName) {
+    console.error("[Debug] No function found. Using first detected function or 'solution'");
+    functionName = functionNames[0] || "solution";
+  }
+  
+  // Call the function with the input
+  console.log("[Debug] Executing function '" + functionName + "' with input");
+  let actualOutput;
+  
+  // Try different ways to call the function
+  try {
+    eval("actualOutput = " + functionName + "(parsedInput)");
+    console.log("[Debug] Function executed successfully");
+  } catch (error) {
+    console.error("[Debug] Error calling function directly:", error.message);
+    
+    // Try calling it using the global object
+    try {
+      actualOutput = global[functionName](parsedInput);
+      console.log("[Debug] Function executed successfully via global object");
+    } catch (error2) {
+      console.error("[Debug] Error calling function via global:", error2.message);
+      
+      // Last resort: try evaling the entire code again with direct function call
+      try {
+        const fullExecution = "function arraySum(numbers) {\n  let sum = 0;\n  for (let i = 0; i < numbers.length; i++) {\n    sum += numbers[i];\n  }\n  return sum;\n}" + "\n" + functionName + "(parsedInput)";
+        actualOutput = eval(fullExecution);
+        console.log("[Debug] Function executed successfully via full code eval");
+      } catch (error3) {
+        console.error("[Debug] All function call attempts failed:", error3.message);
+        throw new Error("Could not execute function: " + error3.message);
+      }
+    }
+  }
+  
+  console.log("[Debug] Actual output:", JSON.stringify(actualOutput));
+  
+  // Check if the output matches the expected output
+  const actualOutputStr = JSON.stringify(actualOutput);
+  const expectedOutputStr = JSON.stringify(parsedExpectedOutput);
+  const isPassed = actualOutputStr === expectedOutputStr;
+  
+  // Print the results
+  console.log("Test: " + (isPassed ? "PASSED" : "FAILED"));
+  console.log("Expected: " + expectedOutputStr);
+  console.log("Actual: " + actualOutputStr);
+} catch (error) {
+  console.error("[Debug] Test error:", error);
+  console.error("Test error: " + error.message);
+}
+
+[2025-04-21T18:40:07.889Z] First test wrapper saved to /home/omar/projects/testforge/logs/test-wrapper-javascript.txt
+
+[2025-04-21T18:40:07.889Z] Creating test wrapper for javascript test: Empty Array Test
+
+[2025-04-21T18:40:07.889Z] Parsed test input/output
+{
+  "input": "[]",
+  "expectedOutput": "0"
+}
+
+[2025-04-21T18:40:07.889Z] Creating test wrapper for javascript test: Negative Numbers Test
+
+[2025-04-21T18:40:07.889Z] Parsed test input/output
+{
+  "input": "[-1, -2, -3, -10]",
+  "expectedOutput": "-16"
+}
+
+[2025-04-21T18:40:07.889Z] Creating test wrapper for javascript test: Mixed Number Types Test
+
+[2025-04-21T18:40:07.889Z] Parsed test input/output
+{
+  "input": "[1.5, 2, -3.5, 10]",
+  "expectedOutput": "10"
+}
+
+[2025-04-21T18:40:07.889Z] Creating test wrapper for javascript test: Large Array Test
+
+[2025-04-21T18:40:07.890Z] Parsed test input/output
+{
+  "input": "Array(1000).fill(1)",
+  "expectedOutput": "1000"
+}
+
+[2025-04-21T18:40:07.890Z] Submitting batch to Judge0
+
+[2025-04-21T18:40:07.890Z] Submitting 5 submissions to Judge0
+
+[2025-04-21T18:40:08.650Z] Received tokens: d5556c5e-ae90-41e4-9e9f-273e3558e18c, 38fe396c-2120-4111-bf30-2c2b750f8967, 0d928133-2759-4053-a297-e3e01e6b8dc9, 46571695-fc9e-488f-a483-74e10a6cd3dd, 08525797-cbfb-4647-ad45-4fa9cfa45de6
+
+[2025-04-21T18:40:08.650Z] Received 5 tokens from Judge0
+
+[2025-04-21T18:40:08.650Z] Waiting for execution to start
+
+[2025-04-21T18:40:09.652Z] Getting batch results from Judge0
+
+[2025-04-21T18:40:09.653Z] Getting results for tokens: d5556c5e-ae90-41e4-9e9f-273e3558e18c, 38fe396c-2120-4111-bf30-2c2b750f8967, 0d928133-2759-4053-a297-e3e01e6b8dc9, 46571695-fc9e-488f-a483-74e10a6cd3dd, 08525797-cbfb-4647-ad45-4fa9cfa45de6
+
+[2025-04-21T18:40:09.654Z] Poll attempt 1/10
+
+[2025-04-21T18:40:09.859Z] Unexpected response format from Judge0
+{
+  "submissions": [
+    {
+      "stdout": "\n[Debug] Starting test execution for 'Large Array Test'\n[Debug] Parsed input: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]\n[Debug] Parsed expected output: 1000\n[Debug] Looking for function in the code...\n[Debug] Detected functions: arraySum\n[Debug] Checking if 'arraySum' is a function\n[Debug] Found function: arraySum\n[Debug] Executing function 'arraySum' with input\n[Debug] Function executed successfully\n[Debug] Actual output: 1000\nTest: PASSED\nExpected: 1000\nActual: 1000\n",
+      "time": "0.025",
+      "memory": 7404,
+      "stderr": null,
+      "token": "08525797-cbfb-4647-ad45-4fa9cfa45de6",
+      "compile_output": null,
+      "message": null,
+      "status": {
+        "id": 4,
+        "description": "Wrong Answer"
+      }
+    }
+  ]
+}
+
+[2025-04-21T18:40:09.859Z] Using response.data.submissions instead
+
+[2025-04-21T18:40:09.859Z] Received 1 execution results
+
+[2025-04-21T18:40:09.859Z] First result:
+{
+  "status": {
+    "id": 4,
+    "description": "Wrong Answer"
+  },
+  "stdout": "\n[Debug] Starting test execution for 'Large Array Test'\n[Debug] Parsed input: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]\n[Debug] Parsed expected output: 1000\n[Debug] Looking for function in the code...\n[Debug] Detected functions: arraySum\n[Debug] Checking if 'arraySum' is a function\n[Debug] Found function: arraySum\n[Debug] Executing function 'arraySum' with input\n[Debug] Function executed successfully\n[Debug] Actual output: 1000\nTest: PASSED\nExpected: 1000\nActual: 1000\n",
+  "stderr": null,
+  "compile_output": null
+}
+
+[2025-04-21T18:40:09.860Z] Processing results for 5 test cases and 1 execution results
+
+[2025-04-21T18:40:09.860Z] Processing test 1: Basic Functionality Test
+{
+  "statusId": 4,
+  "actualOutput": "\n[Debug] Starting test execution for 'Large Array Test'\n[Debug] Parsed input: [1,1,1,1,1,1,1,1,1,1,1...",
+  "errorMessage": ""
+}
+
+[2025-04-21T18:40:09.860Z] Test 1 processed, passed: false
+
+[2025-04-21T18:40:09.860Z] Processing test 2: Empty Array Test
+{
+  "statusId": 0,
+  "actualOutput": "",
+  "errorMessage": ""
+}
+
+[2025-04-21T18:40:09.860Z] Test 2 processed, passed: false
+
+[2025-04-21T18:40:09.860Z] Processing test 3: Negative Numbers Test
+{
+  "statusId": 0,
+  "actualOutput": "",
+  "errorMessage": ""
+}
+
+[2025-04-21T18:40:09.860Z] Test 3 processed, passed: false
+
+[2025-04-21T18:40:09.860Z] Processing test 4: Mixed Number Types Test
+{
+  "statusId": 0,
+  "actualOutput": "",
+  "errorMessage": ""
+}
+
+[2025-04-21T18:40:09.861Z] Test 4 processed, passed: false
+
+[2025-04-21T18:40:09.861Z] Processing test 5: Large Array Test
+{
+  "statusId": 0,
+  "actualOutput": "",
+  "errorMessage": ""
+}
+
+[2025-04-21T18:40:09.861Z] Test 5 processed, passed: false
+
+[2025-04-21T18:40:09.861Z] Tests summary: 0/5 tests passed
+
+[2025-04-21T18:40:09.861Z] Processed results
+{
+  "summary": {
+    "totalTests": 5,
+    "passedTests": 0,
+    "failedTests": 5,
+    "codeDescription": "Verifies that the function correctly adds up positive integers"
+  },
+  "firstTestPassed": false
+}
+
+[2025-04-21T18:40:09.861Z] Test execution completed
+{
+  "summary": {
+    "totalTests": 5,
+    "passedTests": 0,
+    "failedTests": 5,
+    "codeDescription": "Verifies that the function correctly adds up positive integers"
+  }
+}
+
