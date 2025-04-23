@@ -146,15 +146,14 @@ try {
   const funcName = funcMatches ? funcMatches[1] : 'solution';
   const actual = eval(funcName)(input);
   
+  // Output format: "RESULT: PASSED/FAILED [actual value]"
   if (String(expected) === 'NaN') {
-    console.log(isNaN(actual) ? "PASSED" : "FAILED");
+    console.log("RESULT: " + (isNaN(actual) ? "PASSED " : "FAILED ") + actual);
   } else {
-    console.log(actual == expected ? "PASSED" : "FAILED");
+    console.log("RESULT: " + (actual == expected ? "PASSED " : "FAILED ") + actual);
   }
-  console.log(actual);
 } catch (error) {
-  console.log("FAILED");
-  console.error(error.message);
+  console.log("RESULT: FAILED " + error.message);
 }`;
 
     case "python":
@@ -173,14 +172,13 @@ try:
     }
     result = locals()[func_name](input_data)
     
+    # Output format: "RESULT: PASSED/FAILED [actual value]"
     if '${test.expectedOutput}' == 'NaN':
-        print("PASSED" if math.isnan(result) else "FAILED")
+        print(f"RESULT: {'PASSED' if math.isnan(result) else 'FAILED'} {result}")
     else:
-        print("PASSED" if result == expected else "FAILED")
-    print(f"{result}")
+        print(f"RESULT: {'PASSED' if result == expected else 'FAILED'} {result}")
 except Exception as e:
-    print("FAILED")
-    print(f"{str(e)}")`;
+    print(f"RESULT: FAILED {str(e)}")`;
 
     case "cpp":
       return `
@@ -208,17 +206,15 @@ int main() {
         
         double result = maxSubArray(numbers);
         
+        // Output format: "RESULT: PASSED/FAILED [actual value]"
         if ("${test.expectedOutput}" == "NaN") {
-            std::cout << (std::isnan(result) ? "PASSED" : "FAILED") << std::endl;
+            std::cout << "RESULT: " << (std::isnan(result) ? "PASSED " : "FAILED ") << result << std::endl;
         } else {
             double expected = std::stod("${test.expectedOutput}");
-            std::cout << (std::abs(result - expected) < 0.0001 ? "PASSED" : "FAILED") << std::endl;
+            std::cout << "RESULT: " << (std::abs(result - expected) < 0.0001 ? "PASSED " : "FAILED ") << result << std::endl;
         }
-        
-        std::cout << result << std::endl;
     } catch (...) {
-        std::cout << "FAILED" << std::endl;
-        std::cout << "Exception caught" << std::endl;
+        std::cout << "RESULT: FAILED Exception caught" << std::endl;
     }
     return 0;
 }`;

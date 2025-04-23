@@ -110,16 +110,19 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = "";
 
     results.testCases.forEach((test) => {
-      // Process the actualOutput to extract just the value
-      let statusLine = "";
+      // Parse the "RESULT: PASSED/FAILED [value]" format
+      let status = test.passed ? "PASSED" : "FAILED";
       let actualValue = "";
 
       if (test.actualOutput) {
-        const lines = test.actualOutput
-          .split("\n")
-          .filter((line) => line.trim());
-        if (lines.length >= 1) statusLine = lines[0].trim(); // First line is PASSED/FAILED
-        if (lines.length >= 2) actualValue = lines[1].trim(); // Second line is the actual value
+        // Extract the actual value from the output
+        const resultMatch = test.actualOutput.match(
+          /RESULT: (PASSED|FAILED) (.*)/
+        );
+        if (resultMatch && resultMatch.length >= 3) {
+          status = resultMatch[1];
+          actualValue = resultMatch[2].trim();
+        }
       }
 
       const element = document.createElement("div");
@@ -141,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
-      // Toggle details
+      // Toggle details on click
       const info = element.querySelector(".test-info");
       const details = element.querySelector(".test-details");
       info.addEventListener("click", () => {
@@ -153,6 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Make it available globally
+  // Make displayTestResults available globally
   window.displayTestResults = displayTestResults;
 });
